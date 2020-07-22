@@ -17,7 +17,8 @@ var campgroundRoute       = require("./routes/campground"),
  	indeRoute             = require("./routes/index")
 
 //連接資料庫&設置
-mongoose.connect("mongodb://localhost/yelp_camp", { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false});
+var url = process.env.databaseURL || "mongodb://localhost/yelp_camp";
+mongoose.connect(url , { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false});
 app.set("view engine","ejs");
 app.use(bodyparser.urlencoded({extended:true}));
 app.use(express.static(__dirname + "/public"));

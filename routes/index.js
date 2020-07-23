@@ -35,12 +35,15 @@ router.get("/login", function(req, res){
 });
 
 //登入實作
-router.post("/login", passport.authenticate("local", {
-	successRedirect: "/camp",
-	failureRedirect: "/login"
-	}), function(req, res){
-		req.flash("success", "Welcome To YelpCamp " + req.user.username);
-	});
+router.post("/login", function (req, res, next) {
+  passport.authenticate("local",
+    {
+      successRedirect: "/camp",
+      failureRedirect: "/login",
+      failureFlash: true,
+      successFlash: "Welcome to YelpCamp, " + req.body.username + "!"
+    })(req, res);
+});
 
 //登出
 router.get("/logout", function(req, res){

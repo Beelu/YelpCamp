@@ -6,14 +6,26 @@ var middleware = require("../middleware");		//by default會自動找到index
 
 //主資訊頁面-INDEX
 router.get("/", function(req, res){
-	campground.find({}, function(err, camps){
-		if(err){
-			req.flash("error", "Something Get Wrong!");
-			res.redirect("/camp");
-		}else{
-			res.render("campground/index",{camps:camps});
-		}
-	});
+	if(req.query.search){
+		const regex = new RegExp(escapeRegex(req.query.search), 'gi');
+		campground.find({name: regex}, function(err, camps){
+			if(err){
+				req.flash("error", "Something Get Wrong!");
+				res.redirect("/camp");
+			}else{
+				res.render("campground/index",{camps:camps});
+			}
+		});
+	}else{
+		campground.find({}, function(err, camps){
+			if(err){
+				req.flash("error", "Something Get Wrong!");
+				res.redirect("/camp");
+			}else{
+				res.render("campground/index",{camps:camps});
+			}
+		});
+	}
 });
 
 //新增資訊實作-CREATE
@@ -92,5 +104,10 @@ router.delete("/:id", middleware.checkOwnership, function(req, res){
 		}
 	});
 });
+
+//防止有人惡意搜尋大量字串導致伺服器當機
+function escapeRegex(text) {
+    return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+};
 
 module.exports = router;

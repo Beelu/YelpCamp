@@ -5,9 +5,18 @@
 		<h1>Welcome To YelpCamp!</h1>
 		<p>view our hand-picked campgrounds all over the world</p>
 		<a class="btn btn-primary" href="/camp/new">Add New Campground!</a>
+		<div class="d-inline float-right">
+			<form action="/camp" method="GET" class="input-group mb-3">
+				<input type="text" name="search" placeholder="enter campground" class="form-control">
+				<div class="input-group-append"><button class="btn btn-outline-success">Search</button></div>
+			</form>
+		</div>
 	</header>
 	
 	<div class="row">
+		<% if(camps.length == 0){ %>
+			<div style="width:100%;"><h3 class="text-center">Nothing Match, Please Search Again.</h3></div>
+		<% } %>
 		<% camps.forEach(function(camp){ %>
 			<div  class="col-lg-3 col-sm-6 mb-5">
 				<div class="card">

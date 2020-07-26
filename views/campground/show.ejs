@@ -17,8 +17,10 @@
 					<h4 class="float-right">$ <%= foundcamp.price %>/night</h4>
 					<h4><a><%= foundcamp.name %></a></h4>
 					<p><%= foundcamp.description %></p>
-					<h5><em>Submitted By <%= foundcamp.author.username %></em></h5>
-					<% if(currentuser && foundcamp.author.id.equals(currentuser._id)){ %>
+					<h5>
+						<em>Submitted By <%= foundcamp.author.username %>, <%= moment(campground.createdAt).fromNow() %></em>
+					</h5>
+					<%if(currentuser && foundcamp.author.id.equals(currentuser._id) || currentuser && currentuser.isManager){%>
 						<a href="/camp/<%= foundcamp._id %>/edit" class="btn btn-warning">Edit</a>
 						<form class="d-inline" action="/camp/<%= foundcamp._id %>?_method=DELETE" method="POST">
 							<button class="btn btn-danger">Delete</button>
@@ -41,9 +43,10 @@
 							<div class="col-md-12">
 								<hr/>
 								<b><%= comment.author.username %></b>
-								<span class="float-right">10 days ago</span>
+								<span class="float-right"><%= moment(comment.createdAt).fromNow() %></span>
 								<p><%= comment.text %></p>
-								<% if(currentuser && comment.author.id.equals(currentuser._id)){ %>
+								<% if(currentuser && comment.author.id.equals(currentuser._id) ||
+									  currentuser && currentuser.isManager){ %>
 									<div class="float-right">
 										<a href="/camp/<%= foundcamp._id %>/comment/<%= comment._id %>/edit" 
 										   class="btn btn-sm btn-warning">Edit</a>

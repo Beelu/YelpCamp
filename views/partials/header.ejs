@@ -18,7 +18,7 @@
 					<li class="nav-item"><a class="nav-link" href="/login">Login</a></li>
 			  		<li class="nav-item"><a class="nav-link" href="/register">Sign Up</a></li>
 				<% }else{ %>
-					<li class="vav=item"><a class="nav-link">
+					<li class="vav=item"><a href="/user/<%= currentuser._id %>" class="nav-link">
 						<i class="fa fa-user-o" aria-hidden="true"></i> <%= currentuser.username %> 
 					</a></li>
 					<li class="nav-item"><a class="nav-link" href="/logout">Logout</a></li>

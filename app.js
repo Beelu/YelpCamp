@@ -14,9 +14,11 @@ var express               = require("express"),
 
 var campgroundRoute       = require("./routes/campground"),
 	commentRoute          = require("./routes/comment"),
- 	indeRoute             = require("./routes/index")
+ 	indeRoute             = require("./routes/index"),
+	userRoute             = require("./routes/user")
 
 //連接資料庫&設置
+app.locals.moment = require("moment");
 var url = process.env.databaseURL || "mongodb://localhost/yelp_camp";
 mongoose.connect(url , { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false});
 app.set("view engine","ejs");
@@ -47,6 +49,7 @@ app.use(function(req, res, next){
 //用route
 app.use("/camp", campgroundRoute);
 app.use("/camp/:id/comment", commentRoute);
+app.use("/user/:user_id", userRoute);
 app.use("/", indeRoute);
 
 app.listen(process.env.PORT || 3000, process.env.IP, function(){

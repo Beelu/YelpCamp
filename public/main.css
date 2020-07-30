@@ -1,10 +1,16 @@
-.show{
-	margin:5% 0;
-}
-
 .container.mt-5{
 	width:50%;
 	display:block;
 	margin:auto;
 	text-align:center;
+}
+
+.comment_form{
+	background-color:RGB(252, 242, 252);
+}
+
+.fa-campground{
+	color:white;
+	font-size:30px;
+	margin-right:5px;
 }

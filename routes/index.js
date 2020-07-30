@@ -19,7 +19,7 @@ router.get("/register", function(req, res){
 
 //註冊實作
 router.post("/register", function(req, res){
-	var newuser = new user({username: req.body.username});
+	var newuser = new user({username: req.body.username, email: req.body.email});
 	user.register(newuser, req.body.password, function(err, user){
 		if(err){
 			req.flash("error", err.message);

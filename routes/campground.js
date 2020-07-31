@@ -93,7 +93,7 @@ router.get("/new", middleware.isLogin, function(req, res){
 
 //詳細資訊頁面-SHOW
 router.get("/:id", function(req,res){
-	campground.findById(req.params.id).populate("comments likes reviews").exec(function(err, foundcamp){
+	campground.findById(req.params.id).populate("comments reviews").exec(function(err, foundcamp){
 		if(err){
 			req.flash("error", "Something Get Wrong!");
 			res.redirect("/camp");

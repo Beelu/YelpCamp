@@ -2,6 +2,7 @@ var express = require("express");
 var router = express.Router();
 var campground = require("../models/campground");
 var comment = require("../models/comment");
+var review = require("../models/review");
 var middleware = require("../middleware");		//by default會自動找到index
 
 //使用multer上傳
@@ -27,7 +28,7 @@ cloudinary.config({
   api_secret: process.env.APIsecret
 });
 
-//========================================================================================
+//======================================================================================================
 //主資訊頁面-INDEX
 router.get("/", function(req, res){
 	var perPage = 8;
@@ -92,7 +93,7 @@ router.get("/new", middleware.isLogin, function(req, res){
 
 //詳細資訊頁面-SHOW
 router.get("/:id", function(req,res){
-	campground.findById(req.params.id).populate("comments likes").exec(function(err, foundcamp){
+	campground.findById(req.params.id).populate("comments likes reviews").exec(function(err, foundcamp){
 		if(err){
 			req.flash("error", "Something Get Wrong!");
 			res.redirect("/camp");
@@ -136,7 +137,7 @@ router.put("/:id", middleware.checkOwnership, upload.single('img'), function(req
 	});
 });
 
-//刪除功能實作-DESTROY(連帶刪除comment/圖片)
+//刪除功能實作-DESTROY(連帶刪除comment/圖片/reviews)
 router.delete("/:id", middleware.checkOwnership, function(req, res){
 	campground.findByIdAndRemove(req.params.id, function(err, removecamp){
 		if(err){
@@ -148,41 +149,18 @@ router.delete("/:id", middleware.checkOwnership, function(req, res){
 				if (err) {
 					console.log(err);
 				}else{
-					req.flash("success", "Campground has been deleted");
-					res.redirect("/camp");
+					review.deleteMany({_id: {$in: removecamp.reviews}}, (err) => {
+						if (err) {
+							console.log(err);
+							return res.redirect("/camp");
+						}
+						req.flash("success", "Campground deleted successfully!");
+						res.redirect("/camp");
+					});
 				}
         	});
 		}
 	});
-});
-
-// //喜歡按鈕功能實作
-router.post("/:id/like", middleware.isLogin, function (req, res) {
-    campground.findById(req.params.id, function (err, foundCampground) {
-        if (err) {
-            console.log(err);
-            return res.redirect("/camp");
-        }
-
-        // check if req.user._id exists in foundCampground.likes
-        var foundUserLike = foundCampground.likes.some(function (like) {
-            return like.equals(req.user._id);
-        });
-
-        if (foundUserLike) {
-            foundCampground.likes.pull(req.user._id);
-        } else {
-            foundCampground.likes.push(req.user);
-        }
-
-        foundCampground.save(function (err) {
-            if (err) {
-                console.log(err);
-                return res.redirect("/camp");
-            }
-            return res.redirect("/camp/" + foundCampground._id);
-        });
-    });
 });
 
 //防止有人惡意搜尋大量字串導致伺服器當機

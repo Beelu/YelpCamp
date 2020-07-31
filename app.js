@@ -15,7 +15,8 @@ var express               = require("express"),
 var campgroundRoute       = require("./routes/campground"),
 	commentRoute          = require("./routes/comment"),
  	indeRoute             = require("./routes/index"),
-	userRoute             = require("./routes/user")
+	userRoute             = require("./routes/user"),
+	reviewRoutes          = require("./routes/review")
 
 //連接資料庫&設置
 app.locals.moment = require("moment");
@@ -47,10 +48,11 @@ app.use(function(req, res, next){
 });
 
 //用route
+app.use("/", indeRoute);
 app.use("/camp", campgroundRoute);
 app.use("/camp/:id/comment", commentRoute);
 app.use("/user/:user_id", userRoute);
-app.use("/", indeRoute);
+app.use("/camp/:id/review", reviewRoutes);
 
 app.listen(process.env.PORT || 3000, process.env.IP, function(){
 	console.log("The YelpCamp Server Started!");

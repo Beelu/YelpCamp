@@ -23,9 +23,7 @@
 					<img src="<%= camp.img %>" class="card-img-top" style="height: 12vw;">
 					<div class="card-body">
 						<h4 class="card-text"><%= camp.name %></h4>
-						<span class="badge badge-success">
-							<i class="fas fa-thumbs-up"></i> <%= camp.likes.length %>
-						</span>
+						<span><%- '<i class="fas fa-star"></i>'.repeat(camp.rating) %><%- '<i class="far fa-star"></i>'.repeat(5-camp.rating) %></span>
 					</div>
 					<a href="/camp/<%= camp._id %>" class="btn btn-primary">Show More!</a>
 				</div>

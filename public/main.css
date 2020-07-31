@@ -6,6 +6,10 @@
 }
 
 .comment_form{
+	background-color:RGB(235, 251, 252);
+}
+
+.review_form{
 	background-color:RGB(252, 242, 252);
 }
 
@@ -13,4 +17,8 @@
 	color:white;
 	font-size:30px;
 	margin-right:5px;
+}
+
+.fa-star{
+	color:RGB(245, 233, 66);
 }

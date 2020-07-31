@@ -86,8 +86,6 @@
 								<% if(currentuser && review.author.id.equals(currentuser._id) ||
 									  currentuser && currentuser.isManager){ %>
 									<div class="float-right">
-										<a href="/camp/<%= foundcamp._id %>/review/<%= review._id %>/edit" 
-										   class="btn btn-sm btn-warning">Edit</a>
 										<form class="d-inline" 
 											  action="/camp/<%= foundcamp._id %>/review/<%= review._id %>?_method=DELETE"
 											  method="POST">

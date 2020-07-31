@@ -9,8 +9,7 @@ var express               = require("express"),
 	methodoverride        = require("method-override"),
 	campground            = require("./models/campground"),
 	comment               = require("./models/comment"),
-	user                  = require("./models/user"),
-	seedDB                = require("./seeds")
+	user                  = require("./models/user")
 
 var campgroundRoute       = require("./routes/campground"),
 	commentRoute          = require("./routes/comment"),
@@ -27,7 +26,6 @@ app.use(bodyparser.urlencoded({extended:true}));
 app.use(express.static(__dirname + "/public"));
 app.use(methodoverride("_method"));
 app.use(flash());
-//seedDB();
 
 //passport
 app.use(require("express-session")({

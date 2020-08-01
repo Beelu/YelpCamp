@@ -23,7 +23,18 @@
 					<img src="<%= camp.img %>" class="card-img-top" style="height: 12vw;">
 					<div class="card-body">
 						<h4 class="card-text"><%= camp.name %></h4>
-						<span><%- '<i class="fas fa-star"></i>'.repeat(camp.rating) %><%- '<i class="far fa-star"></i>'.repeat(5-camp.rating) %></span>
+						<p>
+							<i class="fas fa-star"></i>
+							<% if (camp.rating > 1.5) { %><i class="fas fa-star"></i>
+							<% }else{ %><i class="far fa-star"></i><% } %>
+							<% if (camp.rating > 2.5) { %><i class="fas fa-star"></i>
+							<% }else{ %><i class="far fa-star"></i><% } %>
+							<% if (camp.rating > 3.5) { %><i class="fas fa-star"></i>
+							<% }else{ %><i class="far fa-star"></i><% } %>
+							<% if (camp.rating > 4.5) { %><i class="fas fa-star"></i>
+							<% }else{ %><i class="far fa-star"></i><% } %>
+							<em>(average: <%= camp.rating %>)</em>
+						</p>
 					</div>
 					<a href="/camp/<%= camp._id %>" class="btn btn-primary">Show More!</a>
 				</div>

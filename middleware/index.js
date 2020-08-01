@@ -50,7 +50,7 @@ middleware.checkReviewOwnership = function(req, res, next) {
             if(err){
                 res.redirect("back");
             }  else {
-                if(foundReview.author.id.equals(req.user._id)) {
+                if(foundReview.author.id.equals(req.user._id) || req.user.isManager) {
                     next();
                 } else {
                     req.flash("error", "You don't have permission to do that");

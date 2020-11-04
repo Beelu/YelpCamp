@@ -1,15 +1,19 @@
 <%- include("../partials/header") %>
 
 <div class="container mt-5">
-	<h1>Add New Campground</h1>
+	<h1>Create Campground</h1>
 
-	<form action="/camp" method="POST">
-		<input class="form-control form-group" type="text" name="name" placeholder="name">
-		<input class="form-control form-group" type="number" name="price" placeholder="price" min="0.01" step="0.01">
-		<input class="form-control form-group" type="text" name="img" placeholder="image">
-		<input class="form-control form-group" type="text" name="description" placeholder="description">
+	<form action="/camp" method="POST" enctype="multipart/form-data">
+		<input class="form-control form-group" type="text" name="campground[name]" placeholder="name" required>
+		<input class="form-control form-group" type="number" name="campground[price]" placeholder="price" required
+			   min="0.01" step="0.01">
+		<div class="form-group float-left">
+            <label for="image">Campground Picture(Limited 4MB):</label>
+            <input type="file" id="image" name="img" accept="image/*" required>
+        </div>
+		<input class="form-control form-group" type="text" name="campground[description]" placeholder="description">
 		<button class="form-control btn btn-primary">Submit!</button>
-		<a href="/camp">Go Back To YelpCamp</a>
+		<a href="/camp">Go Back</a>
 	</form>
 </div>
 

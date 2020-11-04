@@ -9,16 +9,109 @@
 				<li class="list-group-item">Info 2</li>
 				<li class="list-group-item">Info 3</li>
 			</div>
+			<!-- 	顯示reviews星星		 -->
+			<div class="card review_form mt-5" style="margin-bottom:5%;">
+				<div class="card-header">
+					<a class="btn btn-success float-right" role="button" data-toggle="collapse" href="#collapseReviews" 
+					   aria-expanded="false" aria-controls="collapseReviews">
+						Add new review
+					</a>
+				</div>
+				<div class="card-body">
+					<div class="row">
+						<div class="col-md-12">
+							<h3 class="text-center" style="color: green;"><em>Reviews</em></h3>
+							<% if (foundcamp.rating === 0) { %>
+								<h5><em>No reviews yet.</em></h5>
+							<% } else { %>
+								<p>
+									<i class="fas fa-star"></i>
+									<% if (foundcamp.rating > 1.5) { %><i class="fas fa-star"></i>
+									<% }else{ %><i class="far fa-star"></i><% } %>
+									<% if (foundcamp.rating > 2.5) { %><i class="fas fa-star"></i>
+									<% }else{ %><i class="far fa-star"></i><% } %>
+									<% if (foundcamp.rating > 3.5) { %><i class="fas fa-star"></i>
+									<% }else{ %><i class="far fa-star"></i><% } %>
+									<% if (foundcamp.rating > 4.5) { %><i class="fas fa-star"></i>
+									<% }else{ %><i class="far fa-star"></i><% } %>
+									<em>(totals: <%= foundcamp.reviews.length %>)</em>
+								</p>
+							<% } %>
+						</div>
+					</div>	
+					
+					<!--reviews增加欄位區-->
+					<div class="collapse m-2" id="collapseReviews">
+						<div class="card p-2 comment_form" style="border-left: 5px solid #00C851;">
+							<% if(!currentuser){ %>
+								<h5>You need to login. <a href="/login">Click here</a></h5>
+							<% } %>
+							<% if(currentuser){ %>
+								<h4>Write review</h4>
+								<form action="/camp/<%= foundcamp._id %>/review" method="POST">
+									<div class="form-group">
+										 <select name="review[rating]">
+											<option value = "1">Terrible-★☆☆☆☆</option>
+											<option value = "2">Not good-★★☆☆☆</option>
+											<option value = "3" selected = true>Average-★★★☆☆</option>
+											<option value = "4">Very good-★★★★☆</option>
+											<option value = "5">Amazing-★★★★★</option>
+										 </select>
+									</div>
+									<div class="form-group">
+										<textarea class="form-control" name="review[text]"
+												placeholder="Write your review..." rows="3"></textarea>
+									</div>
+									<div class="form-group">
+										<button class="btn btn-success btn-sm">Reviews</button>
+									</div>
+								</form>
+							<% } %>
+						</div>
+					</div>
+					
+					<!-- 	review顯示區	 -->
+					<% foundcamp.reviews.forEach(function(review){ %>
+						<div class="row">
+							<div class="col-md-12">
+								<hr/>
+								<div class="d-block">
+									<%- '<i class="fas fa-star"></i>'.repeat(review.rating) %><%- '<i class="far fa-star"></i>'.repeat(5-review.rating) %>
+									<em><%= review.updatedAt.toDateString() %></em>
+								</div> 
+								<i class="fas fa-user"></i> <b><%= review.author.username %></b>
+								<span class="float-right"><%=  %></span>
+								<p><%= review.text %></p>
+								<% if(currentuser && review.author.id.equals(currentuser._id) ||
+									  currentuser && currentuser.isManager){ %>
+									<div class="float-right">
+										<form class="d-inline" 
+											  action="/camp/<%= foundcamp._id %>/review/<%= review._id %>?_method=DELETE"
+											  method="POST">
+											<button class="btn btn-sm btn-danger">Delete</button>
+										</form>
+									</div>
+								<% } %>
+							</div>	
+						</div>
+					<% }) %>
+				</div>
+			</div>
 		</div>
+<!-----------------------------------------------------以下右邊邊排版--------------------------------------------------------->
+		<!-- 	campground顯示	 -->
 		<div class="col-md-9">
-			<div class="show card">
+			<div class="card">
 				<img src="<%= foundcamp.img %>" style="height:30vw">
 				<div class="card-body">
 					<h4 class="float-right">$ <%= foundcamp.price %>/night</h4>
 					<h4><a><%= foundcamp.name %></a></h4>
+					
 					<p><%= foundcamp.description %></p>
-					<h5><em>Submitted By <%= foundcamp.author.username %></em></h5>
-					<% if(currentuser && foundcamp.author.id.equals(currentuser._id)){ %>
+					<h5>
+						<em>Submitted By <%= foundcamp.author.username %>, <%= moment(foundcamp.createdAt).fromNow() %></em>
+					</h5>
+					<%if(currentuser && foundcamp.author.id.equals(currentuser._id) || currentuser && currentuser.isManager){%>
 						<a href="/camp/<%= foundcamp._id %>/edit" class="btn btn-warning">Edit</a>
 						<form class="d-inline" action="/camp/<%= foundcamp._id %>?_method=DELETE" method="POST">
 							<button class="btn btn-danger">Delete</button>
@@ -26,24 +119,58 @@
 					<% } %>
 				</div>
 			</div>
-			<div class="card" style="margin-bottom:5%">
+			
+			<!-- 	評論顯示區	 -->
+			<div class="card comment_form mt-5" style="margin-bottom:5%;">
 				<div class="card-header">
-					<a href="/camp/<%= foundcamp._id %>/comment/new" class=" float-right btn btn-primary">ADD NEW COMMENT</a>
+					<a class="btn btn-success float-right" role="button" data-toggle="collapse" href="#collapseComment" 
+					   aria-expanded="false" aria-controls="collapseComment">
+						Add new comment
+					</a>
 				</div>
 				<div class="card-body">
 					<div class="row">
 						<div class="col-md-12">
 							<h3 class="text-center" style="color: green;"><em>Comments</em></h3>
 						</div>
+					</div>	
+					
+					<!--評論增加欄位區-->
+					<div class="collapse m-2" id="collapseComment">
+						<div class="card p-2 comment_form" style="border-left: 5px solid #00C851;">
+							<% if(!currentuser){ %>
+								<h5>You need to login before you can comment. <a href="/login">Click here</a></h5>
+							<% } %>
+							<% if(currentuser){ %>
+								<h4>Write your comment</h4>
+								<form id="add-comment-form" action="/camp/<%= foundcamp._id %>/comment" method="POST">
+									<div class="form-group">
+										<input class="form-control" type="text"
+											   disabled value="<%= currentuser.username %>">
+									</div>
+									<div class="form-group">
+										<textarea class="form-control" name="text"
+												placeholder="Write your comment..." form="add-comment-form"
+												rows="5" cols="70"></textarea>
+									</div>
+									<div class="form-group">
+										<button class="btn btn-success btn-sm">Comment</button>
+									</div>
+								</form>
+							<% } %>
+						</div>
 					</div>
+					
+					<!-- 	顯示所有評論	 -->
 					<% foundcamp.comments.forEach(function(comment){ %>
 						<div class="row">
 							<div class="col-md-12">
 								<hr/>
-								<b><%= comment.author.username %></b>
-								<span class="float-right">10 days ago</span>
+								<i class="fas fa-user"></i> <b><%= comment.author.username %></b>
+								<span class="float-right"><%= moment(comment.createdAt).fromNow() %></span>
 								<p><%= comment.text %></p>
-								<% if(currentuser && comment.author.id.equals(currentuser._id)){ %>
+								<% if(currentuser && comment.author.id.equals(currentuser._id) ||
+									  currentuser && currentuser.isManager){ %>
 									<div class="float-right">
 										<a href="/camp/<%= foundcamp._id %>/comment/<%= comment._id %>/edit" 
 										   class="btn btn-sm btn-warning">Edit</a>

@@ -9,21 +9,23 @@ var express               = require("express"),
 	methodoverride        = require("method-override"),
 	campground            = require("./models/campground"),
 	comment               = require("./models/comment"),
-	user                  = require("./models/user"),
-	seedDB                = require("./seeds")
+	user                  = require("./models/user")
 
 var campgroundRoute       = require("./routes/campground"),
 	commentRoute          = require("./routes/comment"),
- 	indeRoute             = require("./routes/index")
+ 	indeRoute             = require("./routes/index"),
+	userRoute             = require("./routes/user"),
+	reviewRoutes          = require("./routes/review")
 
 //連接資料庫&設置
-mongoose.connect("mongodb://localhost/yelp_camp", { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false});
+app.locals.moment = require("moment");
+var url = process.env.databaseURL || "mongodb://localhost/yelp_camp";
+mongoose.connect(url , { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false});
 app.set("view engine","ejs");
 app.use(bodyparser.urlencoded({extended:true}));
 app.use(express.static(__dirname + "/public"));
 app.use(methodoverride("_method"));
 app.use(flash());
-//seedDB();
 
 //passport
 app.use(require("express-session")({
@@ -44,9 +46,11 @@ app.use(function(req, res, next){
 });
 
 //用route
+app.use("/", indeRoute);
 app.use("/camp", campgroundRoute);
 app.use("/camp/:id/comment", commentRoute);
-app.use("/", indeRoute);
+app.use("/user/:user_id", userRoute);
+app.use("/camp/:id/review", reviewRoutes);
 
 app.listen(process.env.PORT || 3000, process.env.IP, function(){
 	console.log("The YelpCamp Server Started!");

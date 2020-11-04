@@ -1,0 +1,24 @@
+<%- include("../partials/header") %>
+
+<div class="container mt-5">
+	<h1>Edit Profile</h1>
+
+	<form action="/user/<%= founduser._id %>?_method=PUT" method="POST">
+		<h6>firstname</h6>
+		<input class="form-control form-group" type="text" name="user[firstname]" value="<%= founduser.firstname %>">
+		<h6>lastname</h6>
+		<input class="form-control form-group" type="text" name="user[lastname]" value="<%= founduser.lastname %>">
+		<h6>avatar</h6>
+		<input class="form-control form-group" type="text" name="user[avatar]" value="<%= founduser.avatar %>">
+		<h6>birthday</h6>
+		<input class="form-control form-group" type="date" name="user[birthday]" value="<%= founduser.birthday %>">
+		<h6>email</h6>
+		<input class="form-control form-group" type="text" name="user[email]" value="<%= founduser.email %>">
+		<h6>description</h6>
+		<input class="form-control form-group" type="text" name="user[description]" value="<%= founduser.description %>">
+		<button class="form-control btn btn-primary">Submit!</button>
+		<a href="/user/<%= founduser._id %>">Go Back</a>
+	</form>
+</div>
+
+<%- include("../partials/footer") %>

@@ -4,18 +4,6 @@ var campground = require("../models/campground");
 var comment = require("../models/comment");
 var middleware = require("../middleware");
 
-//新增評論-NEW
-router.get("/new", middleware.isLogin, function(req, res){
-	campground.findById(req.params.id, function(err, foundcamp){
-		if(err){
-			req.flash("error", "Something Get Wrong!");
-			res.redirect("/camp");
-		}else{
-			res.render("comment/new", {foundcamp:foundcamp});			
-		}
-	});
-});
-
 //新增評論實作-CREATE
 router.post("/", middleware.isLogin, function(req, res){
 	campground.findById(req.params.id, function(err, foundcamp){

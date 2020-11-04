@@ -1,0 +1,13 @@
+<%- include("../partials/header") %>
+
+<div class="container mt-5">
+	<h1>Edit comment</h1>
+
+	<form action="/camp/<%= camp_id %>/comment/<%= foundcomment._id %>?_method=PUT" method="POST">
+		<input class="form-control form-group" type="text" name="comment[text]" value="<%= foundcomment.text %>">
+		<button class="form-control btn btn-primary">Submit!</button>
+		<a href="/camp">Go Back</a>
+	</form>
+</div>
+
+<%- include("../partials/footer") %>
